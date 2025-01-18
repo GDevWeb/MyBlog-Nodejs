@@ -3,8 +3,10 @@ const router = express.Router();
 
 import {
   createPost,
+  deletePost,
   getPosts,
   getPostsById,
+  updatePost,
 } from "../controllers/postController.js";
 
 const postsRoutes = () => {
@@ -25,16 +27,10 @@ const postsRoutes = () => {
   router.post("/create-post", createPost);
 
   // Update a specific article by id
-  router.put("/post/:id", (req: Request, res: Response) => {
-    const articleId = req.params.id;
-    res.send(`Update a specific article by its ID: ${articleId}`);
-  });
+  router.put("/update-post/:id", updatePost);
 
   // Delete a specific article by id
-  router.delete("/post/:id", (req: Request, res: Response) => {
-    const articleId = req.params.id;
-    res.send(`Delete a specific article by its ID: ${articleId}`);
-  });
+  router.delete("/delete-post/:id", deletePost);
 
   return router;
 };

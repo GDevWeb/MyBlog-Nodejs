@@ -6,6 +6,7 @@ interface PostsData {
   author: string;
   publishedDate: string;
   tags: string[];
+  updatedAt?: string;
 }
 
 export default PostsData;

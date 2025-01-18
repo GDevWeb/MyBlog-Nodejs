@@ -1,45 +1,72 @@
-import fs from "fs/promises";
-import { dirname } from "node:path";
+import Post from "../models/post.js";
+import path, { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+/* ***Functions helpers*** */
+import { generateHeaderHTML } from "../helper/generateHeaderHTML.js";
+import { generatePost } from "../helper/generatePostHTML.js";
+import { generatePostsHTML } from "../helper/generatePostsHTML.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
-import path from "path";
-const postsFilePath = path.join(__dirname, "../data/", "posts.json");
-const htmlTemplatePAth = path.join(__dirname, "../views/", "index.html");
 export const getPosts = async (req, res) => {
     try {
-        const rawData = await fs.readFile(postsFilePath, "utf-8");
-        const posts = JSON.parse(rawData);
-        const postsToHTML = posts
-            .map((post) => {
-            return `
-      <div>
-        <h2>${post.title}</h2>
-        <p>${post.content}</p>
-        <p><strong>Author:</strong> ${post.author}</p>
-        <p><strong>Published Date:</strong> ${post.publishedDate}</p>
-        <hr>
-      </div>
-      `;
-        })
-            .join("");
-        const html = `
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Posts</title>
-  </head>
-  <body>
-    <h1>All Blog Posts</h1>
-    ${postsToHTML}
-  </body>
-  </html>
-  `;
+        const posts = await Post.fetchAll();
+        // render in HTML
+        const postToHTML = posts.map(generatePostsHTML).join("");
+        const html = generateHeaderHTML({
+            headerTitle: "All Blog Posts",
+            h1: "All blog Posts",
+            content: postToHTML,
+        });
         res.status(200).send(html);
     }
     catch (error) {
         console.error("Error reading posts:", error);
         res.status(500).json({ error: "Failed to fetch posts" });
+    }
+};
+export const getPostsById = async (req, res) => {
+    try {
+        const post = await Post.findById(Number(req.params.id));
+        // render in HTML
+        if (post) {
+            const postToHTML = generatePost(post);
+            const html = generateHeaderHTML({
+                headerTitle: `Article ${post.title}`,
+                h1: `${post.title}`,
+                content: postToHTML,
+            });
+            res.status(200).send(html);
+        }
+        else {
+            res.status(404).sendFile(path.join(__dirname, "../views/", "404.html"));
+        }
+    }
+    catch (error) {
+        console.error("Error finding post:", error);
+        res.status(500).json({ error: "Failed finding post by id" });
+    }
+};
+export const createPost = async (req, res) => {
+    try {
+        const { title, content, author, published, tags } = req.body;
+        const tagsArray = tags
+            ? tags.split(",").map((tag) => tag.trim())
+            : [];
+        // const newPost = await req.body;
+        const newPost = {
+            title,
+            content,
+            author,
+            published,
+            tags: tagsArray,
+        };
+        if (!newPost) {
+            return res.status(400).json({ message: "Bad request" });
+        }
+        await Post.create(newPost);
+        res.redirect("/posts");
+    }
+    catch (error) {
+        console.error("Error creating a new post");
+        res.status(500).json({ error: "Failed creating new post" });
     }
 };

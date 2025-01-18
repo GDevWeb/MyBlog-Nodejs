@@ -58,16 +58,5 @@
       "Debugging",
       "Development Tools"
     ]
-  },
-  {
-    "id": "631455",
-    "title": "Test",
-    "content": "Hello world",
-    "author": "test",
-    "publishedDate": "2025-01-17",
-    "tags": [
-      "hello",
-      "world"
-    ]
   }
 ]

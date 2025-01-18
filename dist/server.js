@@ -29,6 +29,9 @@ server.get("/contact", (req, res) => {
 });
 // Posts:
 server.use("/posts", postsRoutes());
+server.get("/form", (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, "views", "form.html"));
+});
 // errors
 server.use(function (req, res, next) {
     res.status(404).sendFile(path.join(__dirname, "views", "404.html"));

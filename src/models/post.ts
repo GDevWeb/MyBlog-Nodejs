@@ -2,6 +2,7 @@ import fs from "fs/promises";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import path from "path";
+import { generateDateNow } from "../helper/generateDateNow.js";
 import PostsData from "../types/postsData.type.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -15,7 +16,8 @@ class Post {
     public content: string,
     public author: string,
     public publishedDate: string,
-    public tags: string[]
+    public tags: string[],
+    public updatedAt?: string
   ) {}
 
   /* Helper methods */
@@ -34,7 +36,7 @@ class Post {
   static async writeFile(data: Post) {
     try {
       await fs.writeFile(postsFilePath, JSON.stringify(data, null, 2));
-      console.log(data);
+      console.log("Data successfully written:", data);
     } catch (error) {
       console.error("Error writing to file:", error);
     }
@@ -42,10 +44,12 @@ class Post {
 
   // Validate fields
   static validatePostData(data: Partial<PostsData>): void {
-    const { title, content, author, publishedDate, tags } = data;
+    const { title, content, author, tags } = data;
 
     if (!title || typeof title !== "string" || title.length < 3) {
-      throw new Error("Title must be a string with at least 3 characters");
+      throw new Error(
+        "Title must be a string with at least 3 characters long."
+      );
     }
 
     if (!content || typeof content !== "string" || content.length < 10) {
@@ -54,10 +58,6 @@ class Post {
 
     if (!author || typeof author !== "string") {
       throw new Error("Author must be a valide string");
-    }
-
-    if (!publishedDate || isNaN(Date.parse(publishedDate))) {
-      throw new Error("PublishedDate must be a valid date string");
     }
 
     if (!Array.isArray(tags)) {
@@ -96,21 +96,91 @@ class Post {
       // 0.Validate incoming data
       this.validatePostData(newPostData);
       // 1.Create an unique id
-      const newId = Math.floor(Math.random() * 1000000);
+      const newId = Date.now();
+      const currentDate = generateDateNow();
+      console.log(currentDate);
+
       // 2.Create post
-      const newPost: PostsData = { id: String(newId), ...newPostData };
+      const newPost: PostsData = {
+        id: String(newId),
+        ...newPostData,
+        publishedDate: currentDate,
+      };
 
       // 3.Fetch data
       const posts = await this.fetchAll();
       // 4.Append the new post to the dataset
       posts.push(newPost);
       // 5.save data into json file
-      await fs.writeFile(postsFilePath, JSON.stringify(posts, null, 2));
+      // await fs.writeFile(postsFilePath, JSON.stringify(posts, null, 2));
+      await this.writeFile(posts);
       // 6.return the new post
       return newPost;
     } catch (error) {
       console.error("Error creating post:", error);
       throw new Error("Failed to create post.");
+    }
+  }
+
+  // 3.Update
+  static async updateById({
+    id,
+    title,
+    content,
+    author,
+    tags,
+    updatedAt,
+  }: Partial<Post>): Promise<Post | null> {
+    try {
+      // 1.fetch data
+      const posts = await this.fetchAll();
+      //  2.find postId
+      const postIndex = posts.findIndex((post) => {
+        post.id === id;
+      });
+      // 3.fallback
+      // if there is a match:
+      if (postIndex !== -1) {
+        return null;
+      }
+      // if there is not match
+      posts[postIndex] = {
+        ...posts[postIndex],
+        title: title || posts[postIndex].title,
+        content: content || posts[postIndex].content,
+        author: author || posts[postIndex].author,
+        tags: tags || posts[postIndex].tags,
+        updatedAt: generateDateNow(),
+      };
+
+      await this.writeFile(posts);
+      // await this.writeFile(postsFilePath)
+      return posts[postIndex];
+    } catch (error) {
+      console.error("Error updating post:", error);
+      throw new Error("Failed to update post.");
+    }
+  }
+
+  static async deleteById(id: string) {
+    try {
+      const posts = await this.fetchAll();
+
+      const updatedPosts = posts.filter((post) => post.id !== id);
+
+      /* Fallback */
+      // not found
+      if (posts.length === updatedPosts.length) {
+        return null;
+      }
+
+      //deleted success
+      await this.writeFile(updatedPosts);
+      console.log(`Post ${id} deleted successfully✅`);
+      return true;
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      throw new Error("Failed to delete post");
     }
   }
 }

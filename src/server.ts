@@ -41,6 +41,16 @@ server.get("/contact", (req, res) => {
 // Posts:
 server.use("/posts", postsRoutes());
 
+server.get("/add-article", (req, res) => {
+  res.status(200).sendFile(path.join(__dirname, "views", "add-article.html"));
+});
+
+server.get("/update-article", (req, res) => {
+  res
+    .status(200)
+    .sendFile(path.join(__dirname, "views", "update-article.html"));
+});
+
 // errors
 server.use(function (req: Request, res: Response, next: NextFunction) {
   res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
