@@ -1,4 +1,6 @@
-interface Posts {
+// types for a post
+
+interface Post {
   id: number;
   title: string;
   content: string;
@@ -7,4 +9,4 @@ interface Posts {
   tags: string[];
 }
 
-export default Posts;
+export default Post;

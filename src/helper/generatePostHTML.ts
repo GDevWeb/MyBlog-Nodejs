@@ -1,4 +1,4 @@
-import Posts from "../ts/posts.js";
+import Posts from "../types/post.types.js";
 
 export const generatePost = (post: Posts): string => `
     <div>

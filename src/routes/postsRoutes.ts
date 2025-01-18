@@ -1,7 +1,11 @@
 import express, { NextFunction, Request, Response } from "express";
 const router = express.Router();
 
-import { getPosts, getPostsById } from "../controllers/postController.js";
+import {
+  createPost,
+  getPosts,
+  getPostsById,
+} from "../controllers/postController.js";
 
 const postsRoutes = () => {
   // middleware:
@@ -16,6 +20,9 @@ const postsRoutes = () => {
 
   // Retrieve a specific article by id
   router.get("/post/:id", getPostsById);
+
+  // Create an article
+  router.post("/create-post", createPost);
 
   // Update a specific article by id
   router.put("/post/:id", (req: Request, res: Response) => {

@@ -1,4 +1,5 @@
-interface PostData {
+// types for an array of posts
+interface PostsData {
   id: string;
   title: string;
   content: string;
@@ -7,4 +8,4 @@ interface PostData {
   tags: string[];
 }
 
-export default PostData;
+export default PostsData;

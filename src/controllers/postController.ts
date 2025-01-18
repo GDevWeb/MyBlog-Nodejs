@@ -4,6 +4,7 @@ import Post from "../models/post.js";
 import path, { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
+/* ***Functions helpers*** */
 import { generateHeaderHTML } from "../helper/generateHeaderHTML.js";
 import { generatePost } from "../helper/generatePostHTML.js";
 import { generatePostsHTML } from "../helper/generatePostsHTML.js";
@@ -50,5 +51,20 @@ export const getPostsById = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error finding post:", error);
     res.status(500).json({ error: "Failed finding post by id" });
+  }
+};
+
+export const createPost = async (req: Request, res: Response) => {
+  try {
+    const newPost = await req.body;
+    if (!newPost) {
+      return res.status(400).json({ message: "Bad request" });
+    }
+
+    await Post.create(newPost);
+    res.redirect("/posts");
+  } catch (error) {
+    console.error("Error creating a new post");
+    res.status(500).json({ error: "Failed creating new post" });
   }
 };

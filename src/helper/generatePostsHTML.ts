@@ -1,4 +1,4 @@
-import PostData from "../ts/postData.js";
+import PostData from "../types/postsData.type.js";
 
 export const generatePostsHTML = (post: PostData): string => `
   <div>
