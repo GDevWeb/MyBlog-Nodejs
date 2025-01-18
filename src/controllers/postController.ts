@@ -1,56 +1,54 @@
 import { Request, Response } from "express";
 import Post from "../models/post.js";
 
-import { dirname } from "node:path";
+import path, { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import { generateHeaderHTML } from "../helper/generateHeaderHTML.js";
+import { generatePost } from "../helper/generatePostHTML.js";
+import { generatePostsHTML } from "../helper/generatePostsHTML.js";
 
-interface Posts {
-  id: number;
-  title: string;
-  content: string;
-  author: string;
-  publishedDate: string;
-  tags: string[];
-}
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const getPosts = async (req: Request, res: Response) => {
   try {
     const posts = await Post.fetchAll();
 
-    const postsToHTML = posts
-      .map((post) => {
-        return `
-        <div>
-          <h2>${post.title}</h2>
-          <p>${post.content}</p>
-          <p><strong>Author:</strong> ${post.author}</p>
-          <p><strong>Published Date:</strong> ${post.publishedDate}</p>
-          <hr>
-        </div>
-        `;
-      })
-      .join("");
+    // render in HTML
+    const postToHTML = posts.map(generatePostsHTML).join("");
 
-    const html = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Blog Posts</title>
-    </head>
-    <body>
-      <h1>All Blog Posts</h1>
-      ${postsToHTML}
-    </body>
-    </html>
-    `;
+    const html = generateHeaderHTML({
+      headerTitle: "All Blog Posts",
+      h1: "All blog Posts",
+      content: postToHTML,
+    });
 
     res.status(200).send(html);
   } catch (error) {
     console.error("Error reading posts:", error);
     res.status(500).json({ error: "Failed to fetch posts" });
+  }
+};
+
+export const getPostsById = async (req: Request, res: Response) => {
+  try {
+    const post = await Post.findById(Number(req.params.id));
+
+    // render in HTML
+    if (post) {
+      const postToHTML = generatePost(post);
+
+      const html = generateHeaderHTML({
+        headerTitle: `Article ${post.title}`,
+        h1: `${post.title}`,
+        content: postToHTML,
+      });
+      res.status(200).send(html);
+    } else {
+      res.status(404).sendFile(path.join(__dirname, "../views/", "404.html"));
+    }
+  } catch (error) {
+    console.error("Error finding post:", error);
+    res.status(500).json({ error: "Failed finding post by id" });
   }
 };

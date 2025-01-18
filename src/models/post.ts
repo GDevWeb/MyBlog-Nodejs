@@ -19,13 +19,37 @@ interface PostData {
 
 class Post {
   constructor(
-    public id: string,
+    public id: number,
     public title: string,
     public content: string,
     public author: string,
     public publishedDate: string,
     public tags: string[]
   ) {}
+
+  /* Helper methods */
+  // Read the posts.json file
+  static async readFile() {
+    try {
+      const data = await fs.readFile(postsFilePath, "utf-8");
+      return JSON.parse(data);
+    } catch (error) {
+      console.error("Error reading file:", error);
+      return [];
+    }
+  }
+
+  // Read the posts.json file
+  static async writeFile(data: Post) {
+    try {
+      await fs.writeFile(postsFilePath, JSON.stringify(data, null, 2));
+      console.log(data);
+    } catch (error) {
+      console.error("Error writing to file:", error);
+    }
+  }
+
+  /* ***Core methods*** */
 
   static async fetchAll(): Promise<PostData[]> {
     try {
@@ -35,6 +59,16 @@ class Post {
     } catch (error) {
       console.error("Error reading posts file:", error);
       throw new Error("Could not fetch posts.");
+    }
+  }
+
+  static async findById(id: number) {
+    try {
+      const posts = await this.fetchAll();
+      return posts.find((post) => Number(post.id) === id);
+    } catch (error) {
+      console.error("Error finding post:", error);
+      return null;
     }
   }
 }
