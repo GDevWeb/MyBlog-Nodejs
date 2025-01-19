@@ -6,5 +6,6 @@ export const generatePost = (post) => `
       <p><strong>Published Date:</strong> ${post.publishedDate}</p>
       <hr>
       <a href="/posts">Back to the articles</a>
+      <a href="/posts/post/${post.id}">Update</a>
     </div>
     `;

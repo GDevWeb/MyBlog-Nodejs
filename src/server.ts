@@ -10,7 +10,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const server = express();
 
-const host = "localhost:";
+const host = "localhost";
 const port = process.env.PORT || 3000;
 
 // Middlewares
@@ -18,6 +18,14 @@ const port = process.env.PORT || 3000;
 server.use(express.json());
 // Parse form data
 server.use(express.urlencoded());
+
+// Serve static files
+// html pages
+server.use(express.static(path.join(__dirname, "views")));
+// styles and medias
+server.use(express.static(path.join(__dirname, "../public/css")));
+// assets
+server.use(express.static(path.join(__dirname, "../public/assets")));
 
 // Routes
 
@@ -61,6 +69,6 @@ server.use(function (req: Request, res: Response, next: NextFunction) {
   res.status(500).send("Something went wrong");
 });
 
-server.listen(3000, () => {
+server.listen(port, () => {
   console.log(`Server is running on http://${host}:${port}`);
 });

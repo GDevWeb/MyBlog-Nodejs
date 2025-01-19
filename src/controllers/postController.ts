@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Post from "../models/Post.js";
+import { renderPage } from "./pageController.js";
 
 import path, { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -24,7 +25,8 @@ export const getPosts = async (req: Request, res: Response) => {
       content: postToHTML,
     });
 
-    res.status(200).send(html);
+    // res.status(200).send(html);
+    renderPage(html, res, "Tous les articles");
   } catch (error) {
     console.error("Error reading posts:", error);
     res.status(500).json({ error: "Failed to fetch posts" });

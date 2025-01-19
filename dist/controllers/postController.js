@@ -1,4 +1,4 @@
-import Post from "../models/post.js";
+import Post from "../models/Post.js";
 import path, { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 /* ***Functions helpers*** */
@@ -47,16 +47,15 @@ export const getPostsById = async (req, res) => {
 };
 export const createPost = async (req, res) => {
     try {
-        const { title, content, author, published, tags } = req.body;
+        const { title, content, author, publishedDate, tags } = req.body;
         const tagsArray = tags
             ? tags.split(",").map((tag) => tag.trim())
             : [];
-        // const newPost = await req.body;
         const newPost = {
             title,
             content,
             author,
-            published,
+            publishedDate,
             tags: tagsArray,
         };
         if (!newPost) {
@@ -68,5 +67,50 @@ export const createPost = async (req, res) => {
     catch (error) {
         console.error("Error creating a new post");
         res.status(500).json({ error: "Failed creating new post" });
+    }
+};
+export const updatePost = async (req, res) => {
+    try {
+        // 1.Retrieve the id form params
+        const postId = req.params.id;
+        console.log(postId);
+        const { title, content, author, tags } = req.body;
+        // 2.updatePost
+        const updatedPost = await Post.updateById({
+            id: postId,
+            title,
+            content,
+            author,
+            tags,
+        });
+        if (updatedPost) {
+            // Success
+            res.status(202).json(updatedPost);
+        }
+        else {
+            // Not found
+            res.status(404).sendFile(path.join(__dirname, "../views/", "404.html"));
+        }
+    }
+    catch (error) {
+        console.error("Error in updatePost controller:", error);
+        res.status(500).send("Error updating post");
+    }
+};
+export const deletePost = async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const deletedPost = await Post.deleteById(postId);
+        if (deletedPost) {
+            res.redirect("/");
+        }
+        else {
+            res.status(404).sendFile(path.join(__dirname, "../views/", "404.html"));
+        }
+        //
+    }
+    catch (error) {
+        console.error("Error in deletePost controller:", error);
+        res.status(500).send("Error deleting post");
     }
 };

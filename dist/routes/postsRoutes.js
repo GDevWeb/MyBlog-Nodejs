@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { createPost, getPosts, getPostsById, } from "../controllers/postController.js";
+import { createPost, deletePost, getPosts, getPostsById, updatePost, } from "../controllers/postController.js";
 const postsRoutes = () => {
     // middleware:
     router.use("/", (req, res, next) => {
@@ -15,15 +15,9 @@ const postsRoutes = () => {
     // Create an article
     router.post("/create-post", createPost);
     // Update a specific article by id
-    router.put("/post/:id", (req, res) => {
-        const articleId = req.params.id;
-        res.send(`Update a specific article by its ID: ${articleId}`);
-    });
+    router.put("/update-post/:id", updatePost);
     // Delete a specific article by id
-    router.delete("/post/:id", (req, res) => {
-        const articleId = req.params.id;
-        res.send(`Delete a specific article by its ID: ${articleId}`);
-    });
+    router.delete("/delete-post/:id", deletePost);
     return router;
 };
 export default postsRoutes;

@@ -13,6 +13,11 @@ const port = process.env.PORT || 3000;
 server.use(express.json());
 // Parse form data
 server.use(express.urlencoded());
+// Serve static files
+// html pages
+server.use(express.static(path.join(__dirname, "views")));
+// styles and medias
+server.use(express.static(path.join(__dirname, "public")));
 // Routes
 // ***General***
 // homepage
@@ -29,8 +34,13 @@ server.get("/contact", (req, res) => {
 });
 // Posts:
 server.use("/posts", postsRoutes());
-server.get("/form", (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, "views", "form.html"));
+server.get("/add-article", (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, "views", "add-article.html"));
+});
+server.get("/update-article", (req, res) => {
+    res
+        .status(200)
+        .sendFile(path.join(__dirname, "views", "update-article.html"));
 });
 // errors
 server.use(function (req, res, next) {
@@ -40,6 +50,6 @@ server.use(function (req, res, next) {
 server.use(function (req, res, next) {
     res.status(500).send("Something went wrong");
 });
-server.listen(3000, () => {
+server.listen(port, () => {
     console.log(`Server is running on http://${host}:${port}`);
 });
