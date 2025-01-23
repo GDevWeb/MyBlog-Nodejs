@@ -17,6 +17,8 @@ const postsRoutes = () => {
   });
 
   // Routes:
+  // Upload image
+
   // Retrieve all articles:
   router.get("/", getPosts);
 
@@ -26,8 +28,8 @@ const postsRoutes = () => {
   // Create an article
   router.post("/create-post", createPost);
 
-  // Update a specific article by id
-  router.put("/update-post/:id", updatePost);
+  // Update:
+  router.put("update-post/:id", updatePost);
 
   // Delete a specific article by id
   router.delete("/delete-post/:id", deletePost);

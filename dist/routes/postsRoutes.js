@@ -8,14 +8,15 @@ const postsRoutes = () => {
         next();
     });
     // Routes:
+    // Upload image
     // Retrieve all articles:
     router.get("/", getPosts);
     // Retrieve a specific article by id
     router.get("/post/:id", getPostsById);
     // Create an article
     router.post("/create-post", createPost);
-    // Update a specific article by id
-    router.put("/update-post/:id", updatePost);
+    // Update:
+    router.put("update-post/:id", updatePost);
     // Delete a specific article by id
     router.delete("/delete-post/:id", deletePost);
     return router;

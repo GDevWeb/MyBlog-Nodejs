@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import path from "path";
 
 // Import Routers:
+import pageRoutes from "./routes/pageRoutes.js";
 import postsRoutes from "./routes/postsRoutes.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -17,47 +18,23 @@ const port = process.env.PORT || 3000;
 // Parse json request:
 server.use(express.json());
 // Parse form data
-server.use(express.urlencoded());
+server.use(express.urlencoded({ extended: true }));
 
 // Serve static files
-// html pages
-server.use(express.static(path.join(__dirname, "views")));
 // styles and medias
 server.use(express.static(path.join(__dirname, "../public/css")));
 // assets
 server.use(express.static(path.join(__dirname, "../public/assets")));
 
-// Routes
+// ***Routes***
 
 // ***General***
 
 // homepage
-server.get("/", (req, res) => {
-  res.status(200).sendFile(path.join(__dirname, "views", "index.html"));
-});
-
-// aboutPage
-server.get("/about", (req, res) => {
-  res.status(200).sendFile(path.join(__dirname, "views", "about.html"));
-});
-
-// contactPage
-server.get("/contact", (req, res) => {
-  res.status(200).sendFile(path.join(__dirname, "views", "contact.html"));
-});
+server.use("/", pageRoutes());
 
 // Posts:
 server.use("/posts", postsRoutes());
-
-server.get("/add-article", (req, res) => {
-  res.status(200).sendFile(path.join(__dirname, "views", "add-article.html"));
-});
-
-server.get("/update-article", (req, res) => {
-  res
-    .status(200)
-    .sendFile(path.join(__dirname, "views", "update-article.html"));
-});
 
 // errors
 server.use(function (req: Request, res: Response, next: NextFunction) {

@@ -1,4 +1,5 @@
 import Post from "../models/Post.js";
+import { renderPage } from "./layoutController.js";
 import path, { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 /* ***Functions helpers*** */
@@ -6,6 +7,7 @@ import { generateHeaderHTML } from "../helper/generateHeaderHTML.js";
 import { generatePost } from "../helper/generatePostHTML.js";
 import { generatePostsHTML } from "../helper/generatePostsHTML.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
+/* configure multer */
 export const getPosts = async (req, res) => {
     try {
         const posts = await Post.fetchAll();
@@ -16,7 +18,8 @@ export const getPosts = async (req, res) => {
             h1: "All blog Posts",
             content: postToHTML,
         });
-        res.status(200).send(html);
+        // res.status(200).send(html);
+        renderPage(html, res, "Tous les articles");
     }
     catch (error) {
         console.error("Error reading posts:", error);
@@ -34,7 +37,7 @@ export const getPostsById = async (req, res) => {
                 h1: `${post.title}`,
                 content: postToHTML,
             });
-            res.status(200).send(html);
+            renderPage(html, res, `Détail de l'article ${post.title}`);
         }
         else {
             res.status(404).sendFile(path.join(__dirname, "../views/", "404.html"));
@@ -45,9 +48,25 @@ export const getPostsById = async (req, res) => {
         res.status(500).json({ error: "Failed finding post by id" });
     }
 };
+export const getLatestPosts = async (req, res) => {
+    try {
+        const latestPosts = await Post.getLatest(3);
+        const postToHTML = latestPosts.map(generatePostsHTML).join("");
+        const html = generateHeaderHTML({
+            headerTitle: "Accueil",
+            h1: "Derniers articles",
+            content: postToHTML,
+        });
+        renderPage(html, res, "Accueil");
+    }
+    catch (error) {
+        console.error("Error fetching latest posts", error);
+        res.status(500).json({ error: "Failed to fetch latest posts" });
+    }
+};
 export const createPost = async (req, res) => {
     try {
-        const { title, content, author, publishedDate, tags } = req.body;
+        const { title, content, author, publishedDate, tags, image } = req.body;
         const tagsArray = tags
             ? tags.split(",").map((tag) => tag.trim())
             : [];
@@ -73,7 +92,6 @@ export const updatePost = async (req, res) => {
     try {
         // 1.Retrieve the id form params
         const postId = req.params.id;
-        console.log(postId);
         const { title, content, author, tags } = req.body;
         // 2.updatePost
         const updatedPost = await Post.updateById({

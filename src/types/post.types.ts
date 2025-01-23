@@ -7,6 +7,7 @@ interface Post {
   author: string;
   publishedDate: string;
   tags: string[];
+  imageUrl?: string;
 }
 
 export default Post;

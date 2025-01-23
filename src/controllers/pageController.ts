@@ -1,48 +1,69 @@
-import { Response } from "express";
-import fs from "fs/promises";
-import path, { dirname } from "node:path";
+import { Request, Response } from "express";
+import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-
+import { renderPage } from "./layoutController.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const viewsPath = path.join(__dirname, "../views");
+import { aboutContent } from "../data/aboutContent.js";
+import { addArticleContent } from "../data/addArticleContent.js";
+import { contactContent } from "../data/contactContent.js";
 
-export const renderPage = async (
-  content: string,
+export const getAboutPage = async (
+  req: Request,
   res: Response,
-  pageTitle: string = "My blog"
+  pageTitle: string = "About"
 ) => {
   try {
-    const header = await fs.readFile(
-      path.join(viewsPath, "header.html"),
-      "utf-8"
-    );
-    const footer = await fs.readFile(
-      path.join(viewsPath, "footer.html"),
-      "utf-8"
-    );
+    const content = aboutContent("About me");
 
-    const html = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${pageTitle}</title>
-        <link rel="stylesheet" href="/styles.css" />
-      </head>
-      <body>
-        ${header}
-        <main>
-          ${content}
-        </main>
-        ${footer}
-      </body>
-      </html>
-    `;
-    res.status(200).send(html);
+    renderPage(content, res, pageTitle);
   } catch (error) {
-    console.error("Error rendering page:", error);
-    res.status(500).send("Failed to render page.");
+    console.error("Error rendering About page:", error);
+    res.status(500).send("Failed to render About page.");
+  }
+};
+
+export const getContactPage = async (
+  req: Request,
+  res: Response,
+  pageTitle: string = "Contact"
+) => {
+  try {
+    const content = contactContent("Contact");
+
+    renderPage(content, res, "Contact");
+  } catch (error) {
+    console.error("Error rendering Contact page:", error);
+    res.status(500).send("Failed to render Contact page.");
+  }
+};
+
+export const getAddArticlePage = async (
+  req: Request,
+  res: Response,
+  pageTitle: string = "Ajouter un article"
+) => {
+  try {
+    const content = addArticleContent("Ajouter un article");
+
+    renderPage(content, res, "Ajouter un article");
+  } catch (error) {
+    console.error("Error rendering AddArticle page:", error);
+    res.status(500).send("Failed to render AddArticle page.");
+  }
+};
+
+export const getUpdateArticlePage = async (
+  req: Request,
+  res: Response,
+  pageTitle: string = "Modifier un article"
+) => {
+  try {
+    const content = addArticleContent("Modifier un article");
+
+    renderPage(content, res, "Ajouter un article");
+  } catch (error) {
+    console.error("Error rendering AddArticle page:", error);
+    res.status(500).send("Failed to render AddArticle page.");
   }
 };

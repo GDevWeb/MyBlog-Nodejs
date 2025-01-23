@@ -2,8 +2,8 @@ import fs from "fs/promises";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import path from "path";
-import { generateDateNow } from "../helper/generateDateNow.js";
 import PostsData from "../types/postsData.type.js";
+import { generateDateNow } from "../utils/generateDateNow.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Import Routers:
@@ -17,7 +17,8 @@ class Post {
     public author: string,
     public publishedDate: string,
     public tags: string[],
-    public updatedAt?: string
+    public updatedAt?: string,
+    public imageUrl?: string
   ) {}
 
   /* Helper methods */
@@ -46,23 +47,25 @@ class Post {
   static validatePostData(data: Partial<PostsData>): void {
     const { title, content, author, tags } = data;
 
-    if (!title || typeof title !== "string" || title.length < 3) {
-      throw new Error(
-        "Title must be a string with at least 3 characters long."
-      );
+    console.log("Validating Data:", data);
+
+    if (!title || typeof title !== "string" || title.trim().length < 3) {
+      throw new Error("Title must be a string with at least 3 characters.");
     }
 
-    if (!content || typeof content !== "string" || content.length < 10) {
-      throw new Error("Content must be a string with at least 10 characters");
+    if (!content || typeof content !== "string" || content.trim().length < 10) {
+      throw new Error("Content must be a string with at least 10 characters.");
     }
 
     if (!author || typeof author !== "string") {
-      throw new Error("Author must be a valide string");
+      throw new Error("Author must be a valid string.");
     }
 
     if (!Array.isArray(tags)) {
-      throw new Error("Tags must be an array string");
+      throw new Error("Tags must be an array of strings.");
     }
+
+    console.log("From Validate data:", data);
   }
 
   /* ***Core methods*** */
@@ -90,29 +93,44 @@ class Post {
     }
   }
 
+  static async getLatest(count: number): Promise<PostsData[]> {
+    try {
+      const posts = await this.fetchAll();
+
+      return posts.slice(-count).reverse();
+    } catch (error) {
+      console.error("Error fetching latest posts:", error);
+      throw new Error("Could not retrieve latest posts.");
+    }
+  }
+
   // create a post
   static async create(newPostData: Omit<PostsData, "id">): Promise<PostsData> {
     try {
       // 0.Validate incoming data
       this.validatePostData(newPostData);
+      console.log("From CreatePost", newPostData.imageUrl);
       // 1.Create an unique id
       const newId = Date.now();
       const currentDate = generateDateNow();
       console.log(currentDate);
 
-      // 2.Create post
-      const newPost: PostsData = {
+      const newPost: Post = {
         id: String(newId),
-        ...newPostData,
+        title: newPostData.title,
+        content: newPostData.content,
+        author: newPostData.author,
         publishedDate: currentDate,
+        tags: newPostData.tags,
+        imageUrl: newPostData.imageUrl || "/avatar/default.png",
       };
 
       // 3.Fetch data
       const posts = await this.fetchAll();
       // 4.Append the new post to the dataset
       posts.push(newPost);
+      console.log(newPost);
       // 5.save data into json file
-      // await fs.writeFile(postsFilePath, JSON.stringify(posts, null, 2));
       await this.writeFile(posts);
       // 6.return the new post
       return newPost;
@@ -130,6 +148,7 @@ class Post {
     author,
     tags,
     updatedAt,
+    imageUrl,
   }: Partial<Post>): Promise<Post | null> {
     try {
       // 1.fetch data
@@ -151,6 +170,7 @@ class Post {
         author: author || posts[postIndex].author,
         tags: tags || posts[postIndex].tags,
         updatedAt: generateDateNow(),
+        imageUrl: posts[postIndex].imageUrl,
       };
 
       await this.writeFile(posts);

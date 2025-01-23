@@ -7,6 +7,7 @@ interface PostsData {
   publishedDate: string;
   tags: string[];
   updatedAt?: string;
+  imageUrl?: string;
 }
 
 export default PostsData;

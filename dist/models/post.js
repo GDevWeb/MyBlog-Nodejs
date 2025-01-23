@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import path from "path";
-import { generateDateNow } from "../helper/generateDateNow.js";
+import { generateDateNow } from "../utils/generateDateNow.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Import Routers:
 const postsFilePath = path.join(__dirname, "../data/", "posts.json");
@@ -85,6 +85,16 @@ class Post {
             return null;
         }
     }
+    static async getLatest(count) {
+        try {
+            const posts = await this.fetchAll();
+            return posts.slice(-count).reverse();
+        }
+        catch (error) {
+            console.error("Error fetching latest posts:", error);
+            throw new Error("Could not retrieve latest posts.");
+        }
+    }
     // create a post
     static async create(newPostData) {
         try {
@@ -105,7 +115,6 @@ class Post {
             // 4.Append the new post to the dataset
             posts.push(newPost);
             // 5.save data into json file
-            // await fs.writeFile(postsFilePath, JSON.stringify(posts, null, 2));
             await this.writeFile(posts);
             // 6.return the new post
             return newPost;

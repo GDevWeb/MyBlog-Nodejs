@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import Post from "../models/Post.js";
-import { renderPage } from "./pageController.js";
+import { renderPage } from "./layoutController.js";
 
 import path, { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -12,6 +12,7 @@ import { generatePostsHTML } from "../helper/generatePostsHTML.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+/* configure multer */
 export const getPosts = async (req: Request, res: Response) => {
   try {
     const posts = await Post.fetchAll();
@@ -46,7 +47,7 @@ export const getPostsById = async (req: Request, res: Response) => {
         h1: `${post.title}`,
         content: postToHTML,
       });
-      res.status(200).send(html);
+      renderPage(html, res, `Détail de l'article ${post.title}`);
     } else {
       res.status(404).sendFile(path.join(__dirname, "../views/", "404.html"));
     }
@@ -56,9 +57,30 @@ export const getPostsById = async (req: Request, res: Response) => {
   }
 };
 
+export const getLatestPosts = async (req: Request, res: Response) => {
+  try {
+    const latestPosts = await Post.getLatest(3);
+
+    const postToHTML = latestPosts.map(generatePostsHTML).join("");
+
+    const html = generateHeaderHTML({
+      headerTitle: "Accueil",
+      h1: "Derniers articles",
+      content: postToHTML,
+    });
+
+    renderPage(html, res, "Accueil");
+  } catch (error) {
+    console.error("Error fetching latest posts", error);
+    res.status(500).json({ error: "Failed to fetch latest posts" });
+  }
+};
+
 export const createPost = async (req: Request, res: Response) => {
   try {
-    const { title, content, author, publishedDate, tags } = req.body;
+    const { title, content, author, publishedDate, tags, imageUrl } = req.body;
+
+    console.log("New post From createPost:", req.body);
 
     const tagsArray = tags
       ? tags.split(",").map((tag: string) => tag.trim())
@@ -70,6 +92,7 @@ export const createPost = async (req: Request, res: Response) => {
       author,
       publishedDate,
       tags: tagsArray,
+      imageUrl,
     };
 
     if (!newPost) {
@@ -88,9 +111,8 @@ export const updatePost = async (req: Request, res: Response) => {
   try {
     // 1.Retrieve the id form params
     const postId = req.params.id;
-    console.log(postId);
 
-    const { title, content, author, tags } = req.body;
+    const { title, content, author, tags, imageUrl } = req.body;
 
     // 2.updatePost
     const updatedPost = await Post.updateById({
@@ -99,6 +121,7 @@ export const updatePost = async (req: Request, res: Response) => {
       content,
       author,
       tags,
+      imageUrl,
     });
 
     if (updatedPost) {
