@@ -1,6 +1,6 @@
 export const addArticleContent = (title) => {
-  return `
-      <form action="/posts/create-post" method="post" encType="multipart/form-data">
+    return `
+      <form action="/posts/create-post" method="POST" enctype="application/x-www-form-urlencoded">
       <h1>${title}</h1>
     <div class="formGroup">
       <label for="title">Title</label>
@@ -13,8 +13,8 @@ export const addArticleContent = (title) => {
       />
     </div>
     <div class="formGroup>
-      <label for="image">Image:</label>
-      <input type="file" id="image" name="imageUrl" />
+      <label for="avatar">Image:</label>
+      <input type="file" id="avatar" name="avatar" />
     </div>
     <div class="formGroup">
       <label for="content">Content</label>

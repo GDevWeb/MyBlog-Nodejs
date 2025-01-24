@@ -13,7 +13,12 @@ const port = process.env.PORT || 3000;
 // Parse json request:
 server.use(express.json());
 // Parse form data
-server.use(express.urlencoded());
+server.use(express.urlencoded({ extended: true }));
+// route to upload file
+// server.use(
+//   "/uploads",
+//   express.static(path.join(__dirname, "../public/uploads"))
+// );
 // Serve static files
 // styles and medias
 server.use(express.static(path.join(__dirname, "../public/css")));

@@ -78,23 +78,24 @@ export const getLatestPosts = async (req: Request, res: Response) => {
 
 export const createPost = async (req: Request, res: Response) => {
   try {
-    const { title, content, author, publishedDate, tags } = req.body;
+    const { title, content, author, publishedDate, tags, imageUrl } = req.body;
 
-    console.log(
-      "From createPost in postController - File received from frontend:",
-      req.file
-    );
-    console.log(
-      "From createPost in postController - Body received from frontend:",
-      req.body
-    );
+    console.log("File received from frontend:", req.file);
+    console.log("Body received from frontend:", req.body);
 
     const tagsArray = tags
       ? tags.split(",").map((tag: string) => tag.trim())
       : [];
 
-    const filePath = req.file
-      ? `/uploads/${req.file.filename}`
+    const file = req.body.avatar;
+    // const fileName = req.file?.originalname;
+    const fileName = req.body.avatar;
+    const hashedPath = `${Date.now()}-${Math.round(
+      Math.random() * 1e9
+    )}-${fileName}`;
+
+    const filePath = req.body.avatar
+      ? `/uploads/${hashedPath}`
       : "/avatar/default.png";
 
     const newPost = {

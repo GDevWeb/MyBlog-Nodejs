@@ -5,7 +5,7 @@ export const generatePostsHTML = (post) => `
       <article>
           <h2>${post.title}</h2>
             <p>
-              ${post.content.slice(0, 250) + "..."}
+              ${post.content ? post.content.slice(0, 250) + "..." : ""}
             </p>
         <div class="containerCta">
           <p class="author">Auteur: <span>${post.author}</span></p>

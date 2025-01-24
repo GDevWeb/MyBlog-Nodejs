@@ -37,7 +37,6 @@ class Post {
   static async writeFile(data: Post) {
     try {
       await fs.writeFile(postsFilePath, JSON.stringify(data, null, 2));
-      console.log("Data successfully written:", data);
     } catch (error) {
       console.error("Error writing to file:", error);
     }
@@ -65,7 +64,7 @@ class Post {
       throw new Error("Tags must be an array of strings.");
     }
 
-    console.log("From Validate data:", data);
+    // Add check for image
   }
 
   /* ***Core methods*** */
@@ -109,11 +108,9 @@ class Post {
     try {
       // 0.Validate incoming data
       this.validatePostData(newPostData);
-      console.log("From CreatePost", newPostData.imageUrl);
       // 1.Create an unique id
       const newId = Date.now();
       const currentDate = generateDateNow();
-      console.log(currentDate);
 
       const newPost: Post = {
         id: String(newId),
@@ -122,14 +119,13 @@ class Post {
         author: newPostData.author,
         publishedDate: currentDate,
         tags: newPostData.tags,
-        imageUrl: newPostData.imageUrl || "/avatar/default.png",
+        imageUrl: newPostData.imageUrl,
       };
 
       // 3.Fetch data
       const posts = await this.fetchAll();
       // 4.Append the new post to the dataset
       posts.push(newPost);
-      console.log(newPost);
       // 5.save data into json file
       await this.writeFile(posts);
       // 6.return the new post
@@ -196,7 +192,6 @@ class Post {
 
       //deleted success
       await this.writeFile(updatedPosts);
-      console.log(`Post ${id} deleted successfully✅`);
       return true;
     } catch (error) {
       console.error("Error deleting post:", error);

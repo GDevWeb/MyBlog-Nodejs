@@ -72,8 +72,12 @@ export const createPost = async (req, res) => {
         const tagsArray = tags
             ? tags.split(",").map((tag) => tag.trim())
             : [];
+        const file = req.body.avatar;
+        // const fileName = req.file?.originalname;
+        const fileName = req.body.avatar;
+        const hashedPath = `${Date.now()}-${Math.round(Math.random() * 1e9)}-${fileName}`;
         const filePath = req.body.avatar
-            ? `/uploads/${req.body.avatar}`
+            ? `/uploads/${hashedPath}`
             : "/avatar/default.png";
         const newPost = {
             title,

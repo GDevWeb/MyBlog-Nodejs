@@ -14,7 +14,8 @@ class Post {
     publishedDate;
     tags;
     updatedAt;
-    constructor(id, title, content, author, publishedDate, tags, updatedAt) {
+    imageUrl;
+    constructor(id, title, content, author, publishedDate, tags, updatedAt, imageUrl) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -22,6 +23,7 @@ class Post {
         this.publishedDate = publishedDate;
         this.tags = tags;
         this.updatedAt = updatedAt;
+        this.imageUrl = imageUrl;
     }
     /* Helper methods */
     // Read the posts.json file
@@ -48,18 +50,21 @@ class Post {
     // Validate fields
     static validatePostData(data) {
         const { title, content, author, tags } = data;
-        if (!title || typeof title !== "string" || title.length < 3) {
-            throw new Error("Title must be a string with at least 3 characters long.");
+        console.log("Validating Data:", data);
+        if (!title || typeof title !== "string" || title.trim().length < 3) {
+            throw new Error("Title must be a string with at least 3 characters.");
         }
-        if (!content || typeof content !== "string" || content.length < 10) {
-            throw new Error("Content must be a string with at least 10 characters");
+        if (!content || typeof content !== "string" || content.trim().length < 10) {
+            throw new Error("Content must be a string with at least 10 characters.");
         }
         if (!author || typeof author !== "string") {
-            throw new Error("Author must be a valide string");
+            throw new Error("Author must be a valid string.");
         }
         if (!Array.isArray(tags)) {
-            throw new Error("Tags must be an array string");
+            throw new Error("Tags must be an array of strings.");
         }
+        // Add check for image
+        console.log("From Validate data:", data);
     }
     /* ***Core methods*** */
     // retrieve all posts
@@ -100,20 +105,25 @@ class Post {
         try {
             // 0.Validate incoming data
             this.validatePostData(newPostData);
+            console.log("From CreatePost", newPostData.imageUrl);
             // 1.Create an unique id
             const newId = Date.now();
             const currentDate = generateDateNow();
             console.log(currentDate);
-            // 2.Create post
             const newPost = {
                 id: String(newId),
-                ...newPostData,
+                title: newPostData.title,
+                content: newPostData.content,
+                author: newPostData.author,
                 publishedDate: currentDate,
+                tags: newPostData.tags,
+                imageUrl: newPostData.imageUrl,
             };
             // 3.Fetch data
             const posts = await this.fetchAll();
             // 4.Append the new post to the dataset
             posts.push(newPost);
+            console.log(newPost);
             // 5.save data into json file
             await this.writeFile(posts);
             // 6.return the new post
@@ -125,7 +135,7 @@ class Post {
         }
     }
     // 3.Update
-    static async updateById({ id, title, content, author, tags, updatedAt, }) {
+    static async updateById({ id, title, content, author, tags, updatedAt, imageUrl, }) {
         try {
             // 1.fetch data
             const posts = await this.fetchAll();
@@ -146,6 +156,7 @@ class Post {
                 author: author || posts[postIndex].author,
                 tags: tags || posts[postIndex].tags,
                 updatedAt: generateDateNow(),
+                imageUrl: posts[postIndex].imageUrl,
             };
             await this.writeFile(posts);
             // await this.writeFile(postsFilePath)
