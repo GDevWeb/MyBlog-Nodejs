@@ -21,8 +21,8 @@ export const getPosts = async (req: Request, res: Response) => {
     const postToHTML = posts.map(generatePostsHTML).join("");
 
     const html = generateHeaderHTML({
-      headerTitle: "All Blog Posts",
-      h1: "All blog Posts",
+      headerTitle: "Articles",
+      h1: "Articles",
       content: postToHTML,
     });
 
@@ -47,7 +47,12 @@ export const getPostsById = async (req: Request, res: Response) => {
         h1: `${post.title}`,
         content: postToHTML,
       });
-      renderPage(html, res, `Détail de l'article ${post.title}`);
+      renderPage(
+        html,
+        res,
+        `Détail de l'article ${post.title}`,
+        "/handleDeleteAndUpdate.js"
+      );
     } else {
       res.status(404).sendFile(path.join(__dirname, "../views/", "404.html"));
     }
@@ -69,14 +74,17 @@ export const getLatestPosts = async (req: Request, res: Response) => {
       content: postToHTML,
     });
 
-    renderPage(html, res, "Accueil");
+    renderPage(html, res, "Derniers articles");
   } catch (error) {
     console.error("Error fetching latest posts", error);
     res.status(500).json({ error: "Failed to fetch latest posts" });
   }
 };
 
-export const createPost = async (req: Request, res: Response) => {
+export const createPost = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { title, content, author, publishedDate, tags } = req.body;
 
@@ -98,10 +106,12 @@ export const createPost = async (req: Request, res: Response) => {
     };
 
     if (!newPost) {
-      return res.status(400).json({ message: "Bad request" });
+      res.status(400).json({ message: "Missing required fields❗" });
+      return;
     }
 
     await Post.create(newPost);
+    res.status(201);
     res.redirect("/posts");
   } catch (error) {
     console.error("Error creating a new post");
@@ -146,7 +156,7 @@ export const deletePost = async (req: Request, res: Response) => {
     const deletedPost = await Post.deleteById(postId);
 
     if (deletedPost) {
-      res.redirect("/");
+      res.status(200).json({ message: "Post deleted successfully" });
     } else {
       res.status(404).sendFile(path.join(__dirname, "../views/", "404.html"));
     }

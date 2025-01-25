@@ -1,7 +1,6 @@
-export const contactContent = (title: string) => {
+export const contactContent = () => {
   return `
   <section id="contact">
-  <h1>${title}</h1>
   <p>
     I'd love to hear from you! Whether you have a question, feedback, or just want to connect, feel free to reach out using the form below or via the provided contact details.
   </p>
@@ -27,7 +26,6 @@ export const contactContent = (title: string) => {
 </section>
 
 <section id="contact">
-  <h1>${title}</h1>
   <p>
     J'aimerais beaucoup avoir de vos nouvelles ! Que vous ayez une question, un commentaire ou simplement envie de me contacter, n'hésitez pas à utiliser le formulaire ci-dessous ou les coordonnées fournies.
   </p>

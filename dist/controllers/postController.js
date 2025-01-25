@@ -14,8 +14,8 @@ export const getPosts = async (req, res) => {
         // render in HTML
         const postToHTML = posts.map(generatePostsHTML).join("");
         const html = generateHeaderHTML({
-            headerTitle: "All Blog Posts",
-            h1: "All blog Posts",
+            headerTitle: "Articles",
+            h1: "Articles",
             content: postToHTML,
         });
         // res.status(200).send(html);
@@ -37,7 +37,7 @@ export const getPostsById = async (req, res) => {
                 h1: `${post.title}`,
                 content: postToHTML,
             });
-            renderPage(html, res, `Détail de l'article ${post.title}`);
+            renderPage(html, res, `Détail de l'article ${post.title}`, "/handleDeleteAndUpdate.js");
         }
         else {
             res.status(404).sendFile(path.join(__dirname, "../views/", "404.html"));
@@ -57,7 +57,7 @@ export const getLatestPosts = async (req, res) => {
             h1: "Derniers articles",
             content: postToHTML,
         });
-        renderPage(html, res, "Accueil");
+        renderPage(html, res, "Derniers articles");
     }
     catch (error) {
         console.error("Error fetching latest posts", error);
@@ -82,9 +82,11 @@ export const createPost = async (req, res) => {
             imageUrl: filePath,
         };
         if (!newPost) {
-            return res.status(400).json({ message: "Bad request" });
+            res.status(400).json({ message: "Missing required fields❗" });
+            return;
         }
         await Post.create(newPost);
+        res.status(201);
         res.redirect("/posts");
     }
     catch (error) {
@@ -125,7 +127,7 @@ export const deletePost = async (req, res) => {
         const postId = req.params.id;
         const deletedPost = await Post.deleteById(postId);
         if (deletedPost) {
-            res.redirect("/");
+            res.status(200).json({ message: "Post deleted successfully" });
         }
         else {
             res.status(404).sendFile(path.join(__dirname, "../views/", "404.html"));

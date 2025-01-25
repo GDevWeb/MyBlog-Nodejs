@@ -1,7 +1,6 @@
-export const updateFormLayout = (pageTitle: string) => {
+export const updateFormLayout = () => {
   return `
   <section>
-  <h1>${pageTitle}</h1>
   <form id="updatePostForm" action="/posts/:id" method="POST">
   <label for="title">Title:</label>
   <input type="text" id="title" name="title" required>

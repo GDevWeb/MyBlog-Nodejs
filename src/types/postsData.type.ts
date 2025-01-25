@@ -1,5 +1,5 @@
 // types for an array of posts
-interface PostsData {
+export interface PostsDataType {
   id: string;
   title: string;
   content: string;
@@ -10,4 +10,4 @@ interface PostsData {
   imageUrl?: string;
 }
 
-export default PostsData;
+export default PostsDataType;

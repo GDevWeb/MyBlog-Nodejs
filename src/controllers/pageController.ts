@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { renderPage } from "./layoutController.js";
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 import { aboutContent } from "../data/aboutContent.js";
@@ -9,28 +10,20 @@ import { addArticleContent } from "../data/addArticleContent.js";
 import { contactContent } from "../data/contactContent.js";
 import { updateFormLayout } from "../data/updateFormLayout.js";
 
-export const getAboutPage = async (
-  req: Request,
-  res: Response,
-  pageTitle: string = "About"
-) => {
+export const getAboutPage = async (req: Request, res: Response) => {
   try {
-    const content = aboutContent("About me");
+    const content = aboutContent("À propos");
 
-    renderPage(content, res, pageTitle);
+    renderPage(content, res, "À propos");
   } catch (error) {
     console.error("Error rendering About page:", error);
     res.status(500).send("Failed to render About page.");
   }
 };
 
-export const getContactPage = async (
-  req: Request,
-  res: Response,
-  pageTitle: string = "Contact"
-) => {
+export const getContactPage = async (req: Request, res: Response) => {
   try {
-    const content = contactContent("Contact");
+    const content = contactContent();
 
     renderPage(content, res, "Contact");
   } catch (error) {
@@ -39,13 +32,9 @@ export const getContactPage = async (
   }
 };
 
-export const getAddArticlePage = async (
-  req: Request,
-  res: Response,
-  pageTitle: string = "Ajouter un article"
-) => {
+export const getAddArticlePage = async (req: Request, res: Response) => {
   try {
-    const content = addArticleContent("Ajouter un article");
+    const content = addArticleContent();
 
     renderPage(content, res, "Ajouter un article");
   } catch (error) {
@@ -54,15 +43,14 @@ export const getAddArticlePage = async (
   }
 };
 
-export const getUpdateArticlePage = async (
-  req: Request,
-  res: Response,
-  pageTitle: string = "Modifier un article"
-) => {
+export const getUpdateArticlePage = async (req: Request, res: Response) => {
   try {
-    const content = "Modifier un article";
-
-    renderPage(updateFormLayout(content), res, "Modifier un article");
+    renderPage(
+      updateFormLayout(),
+      res,
+      "Modifier un article",
+      '"/handleUpdateForm.js"'
+    );
   } catch (error) {
     console.error("Error rendering AddArticle page:", error);
     res.status(500).send("Failed to render AddArticle page.");

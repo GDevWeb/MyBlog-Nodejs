@@ -10,7 +10,8 @@ const viewsPath = path.join(__dirname, "../views");
 export const renderPage = async (
   content: string,
   res: Response,
-  pageTitle: string = "My blog"
+  pageTitle: string = "titlePage",
+  js?: string
 ) => {
   try {
     const header = await fs.readFile(
@@ -30,10 +31,12 @@ export const renderPage = async (
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>${pageTitle}</title>
         <link rel="stylesheet" href="/styles.css" />
+        <script type="module" src=${js ? js : "/main.js"} defer></script>
       </head>
       <body>
         ${header}
         <main>
+        <h1>${pageTitle}</h1>
           ${content}
         </main>
         ${footer}

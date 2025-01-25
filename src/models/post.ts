@@ -2,7 +2,8 @@ import fs from "fs/promises";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import path from "path";
-import PostsData from "../types/postsData.type.js";
+import PostType from "../types/post.types.js";
+import PostsData, { PostsDataType } from "../types/postsData.type.js";
 import { generateDateNow } from "../utils/generateDateNow.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -34,7 +35,7 @@ class Post {
   }
 
   // Read the posts.json file
-  static async writeFile(data: Post) {
+  static async writeFile(data: Post[]): Promise<void> {
     try {
       await fs.writeFile(postsFilePath, JSON.stringify(data, null, 2));
     } catch (error) {
@@ -70,7 +71,7 @@ class Post {
   /* ***Core methods*** */
 
   // retrieve all posts
-  static async fetchAll(): Promise<PostsData[]> {
+  static async fetchAll(): Promise<PostsDataType[]> {
     try {
       const rawData = await fs.readFile(postsFilePath, "utf-8");
       const posts: PostsData[] = JSON.parse(rawData);
@@ -104,7 +105,9 @@ class Post {
   }
 
   // create a post
-  static async create(newPostData: Omit<PostsData, "id">): Promise<PostsData> {
+  static async create(
+    newPostData: Omit<PostsDataType, "id">
+  ): Promise<PostsDataType> {
     try {
       // 0.Validate incoming data
       this.validatePostData(newPostData);
@@ -112,7 +115,7 @@ class Post {
       const newId = Date.now();
       const currentDate = generateDateNow();
 
-      const newPost: Post = {
+      const newPost: PostType = {
         id: String(newId),
         title: newPostData.title,
         content: newPostData.content,
@@ -145,7 +148,7 @@ class Post {
     tags,
     updatedAt,
     imageUrl,
-  }: Partial<Post>): Promise<Post | null> {
+  }: Partial<Post>): Promise<PostType | null> {
     try {
       // 1.fetch data
       const posts = await this.fetchAll();
@@ -182,13 +185,15 @@ class Post {
     try {
       const posts = await this.fetchAll();
 
-      const updatedPosts = posts.filter((post) => post.id !== id);
+      const updatedPosts: PostType[] = posts.filter((post) => post.id !== id);
 
       /* Fallback */
       // not found
       if (posts.length === updatedPosts.length) {
         return null;
       }
+
+      // delete - unlink img
 
       //deleted success
       await this.writeFile(updatedPosts);

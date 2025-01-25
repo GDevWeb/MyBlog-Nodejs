@@ -1,7 +1,7 @@
 // types for a post
 
-interface Post {
-  id: number;
+export interface PostType {
+  id: string;
   title: string;
   content: string;
   author: string;
@@ -10,4 +10,4 @@ interface Post {
   imageUrl?: string;
 }
 
-export default Post;
+export default PostType;

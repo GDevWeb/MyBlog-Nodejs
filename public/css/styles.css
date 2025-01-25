@@ -12,6 +12,10 @@
   --font-color-dark: #000000; /* Text color for dark backgrounds */
   --font-color-light: #ffffff; /* Text color for light backgrounds */
   --debug-color: orange; /* For debugging layout boundaries */
+
+  --success-color: #5ab75c;
+  --danger-color: #da4f4a;
+  --info-color: #faa632;
 }
 
 /* Reset */
@@ -302,6 +306,19 @@ form button:active {
 form button:focus {
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
+}
+
+/* CRUD buttons :   */
+button > a {
+  color: var(--font-color-light);
+}
+
+button.updateBtn {
+  background: var(--info-color);
+}
+
+button.deleteBtn {
+  background: var(--danger-color);
 }
 
 /* Debugging (Optional) */

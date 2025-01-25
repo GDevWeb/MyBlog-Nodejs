@@ -1,7 +1,7 @@
-export const aboutContent = (pageTitle: string) => {
+export const aboutContent = (pageTitle?: string) => {
   return `
   <section id="about">
-  <h1>${pageTitle}</h1>
+  <h1>About</h1>
   <p>
     Hello, and welcome to my blog! I'm a passionate web developer with a strong interest in building scalable and efficient applications. Over the years, I've honed my skills in various technologies, including Node.js, Express.js, PostgreSQL, and modern frontend frameworks like Angular and React.
   </p>

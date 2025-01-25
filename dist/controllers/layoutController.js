@@ -3,7 +3,7 @@ import path, { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const viewsPath = path.join(__dirname, "../views");
-export const renderPage = async (content, res, pageTitle = "My blog") => {
+export const renderPage = async (content, res, pageTitle = "titlePage", js) => {
     try {
         const header = await fs.readFile(path.join(viewsPath, "header.html"), "utf-8");
         const footer = await fs.readFile(path.join(viewsPath, "footer.html"), "utf-8");
@@ -15,10 +15,12 @@ export const renderPage = async (content, res, pageTitle = "My blog") => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>${pageTitle}</title>
         <link rel="stylesheet" href="/styles.css" />
+        <script type="module" src=${js ? js : "/main.js"} defer></script>
       </head>
       <body>
         ${header}
         <main>
+        <h1>${pageTitle}</h1>
           ${content}
         </main>
         ${footer}
