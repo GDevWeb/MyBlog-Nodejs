@@ -4,14 +4,20 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadPath = path.join(__dirname, "../uploads");
-        console.log("Destination path:", uploadPath); // Log the path
-        cb(null, uploadPath);
+        console.log("Processing file in Multer:", file);
+        cb(null, path.join(__dirname, "../../public/uploads"));
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-        console.log("Generated filename:", uniqueSuffix);
         cb(null, `${uniqueSuffix}-${file.originalname}`);
     },
 });
-export const upload = multer({ storage });
+// File filter function
+const fileFilter = (req, file, cb) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.mimetype)) {
+        return cb(new Error(`Invalid file type: ${file.mimetype}. Only JPG, JPEG, PNG, and WEBP are allowed.`));
+    }
+    cb(null, true);
+};
+export const upload = multer({ storage, fileFilter });

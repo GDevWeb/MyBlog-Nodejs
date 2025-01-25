@@ -5,10 +5,9 @@ import { createPost, deletePost, getPosts, getPostsById, updatePost, } from "../
 const postsRoutes = () => {
     // Routes:
     // Upload image
-    router.post("/test-upload", upload.single("avatar"), (req, res) => {
+    router.post("/test-upload", upload.single("file"), (req, res) => {
         try {
             if (req.file) {
-                console.log("Uploaded File:", req.file);
                 res
                     .status(200)
                     .json({ message: "File uploaded successfully!", file: req.file });
@@ -27,9 +26,9 @@ const postsRoutes = () => {
     // Retrieve a specific article by id
     router.get("/post/:id", getPostsById);
     // Create an article
-    router.post("/create-post", upload.single("avatar"), createPost);
+    router.post("/create-post", upload.single("file"), createPost);
     // Update:
-    router.put("update-post/:id", upload.single("avatar"), updatePost);
+    router.put("update-post/:id", upload.single("file"), updatePost);
     // Delete a specific article by id
     router.delete("/delete-post/:id", deletePost);
     return router;

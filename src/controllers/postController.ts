@@ -80,15 +80,6 @@ export const createPost = async (req: Request, res: Response) => {
   try {
     const { title, content, author, publishedDate, tags } = req.body;
 
-    console.log(
-      "From createPost in postController - File received from frontend:",
-      req.file
-    );
-    console.log(
-      "From createPost in postController - Body received from frontend:",
-      req.body
-    );
-
     const tagsArray = tags
       ? tags.split(",").map((tag: string) => tag.trim())
       : [];

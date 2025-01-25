@@ -26,6 +26,8 @@ server.use(
   express.static(path.join(__dirname, "../public/uploads"))
 );
 
+server.use(express.static(path.join(__dirname, "../src/")));
+
 // Serve static files
 // styles and medias
 server.use(express.static(path.join(__dirname, "../public/css")));

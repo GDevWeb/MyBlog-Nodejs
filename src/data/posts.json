@@ -5,11 +5,7 @@
     "content": "Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine.",
     "author": "John Doe",
     "publishedDate": "2023-01-15",
-    "tags": [
-      "Node.js",
-      "JavaScript",
-      "Backend"
-    ],
+    "tags": ["Node.js", "JavaScript", "Backend"],
     "imageUrl": "/assets/avatar/default.png"
   },
   {
@@ -18,11 +14,7 @@
     "content": "TypeScript is a superset of JavaScript that adds static typing.",
     "author": "Jane Smith",
     "publishedDate": "2023-02-10",
-    "tags": [
-      "TypeScript",
-      "JavaScript",
-      "Programming"
-    ]
+    "tags": ["TypeScript", "JavaScript", "Programming"]
   },
   {
     "id": 3,
@@ -30,11 +22,7 @@
     "content": "Express.js is a minimal and flexible Node.js web application framework.",
     "author": "Alice Brown",
     "publishedDate": "2023-03-05",
-    "tags": [
-      "Express.js",
-      "Node.js",
-      "Web Development"
-    ]
+    "tags": ["Express.js", "Node.js", "Web Development"]
   },
   {
     "id": 4,
@@ -42,11 +30,7 @@
     "content": "REST APIs allow applications to communicate via HTTP methods.",
     "author": "Bob Johnson",
     "publishedDate": "2023-04-12",
-    "tags": [
-      "REST",
-      "APIs",
-      "Web Development"
-    ]
+    "tags": ["REST", "APIs", "Web Development"]
   },
   {
     "id": 5,
@@ -54,11 +38,7 @@
     "content": "Learn how to debug JavaScript code using tools like Chrome DevTools.",
     "author": "Chris Lee",
     "publishedDate": "2023-05-20",
-    "tags": [
-      "JavaScript",
-      "Debugging",
-      "Development Tools"
-    ]
+    "tags": ["JavaScript", "Debugging", "Development Tools"]
   },
   {
     "id": "1737282865458",
@@ -66,9 +46,7 @@
     "content": "Test lorem ipsum",
     "author": "test",
     "publishedDate": "dimanche 19 janvier 2025",
-    "tags": [
-      "test"
-    ]
+    "tags": ["test"]
   },
   {
     "id": "1737306590702",
@@ -76,9 +54,7 @@
     "content": "lorem ipsum dolores",
     "author": "moi",
     "publishedDate": "dimanche 19 janvier 2025",
-    "tags": [
-      "test"
-    ]
+    "tags": ["test"]
   },
   {
     "id": "1737397474073",
@@ -86,10 +62,7 @@
     "content": "Il était une fois Océane l'âne",
     "author": "Moi",
     "publishedDate": "lundi 20 janvier 2025",
-    "tags": [
-      "Océane",
-      "Ane"
-    ],
+    "tags": ["Océane", "Ane"],
     "imageUrl": "/avatar/donkey.webp"
   },
   {
@@ -98,10 +71,7 @@
     "content": "Annabeth la moufette...\r\nElle fouette quand elle pète ...",
     "author": "moi",
     "publishedDate": "lundi 20 janvier 2025",
-    "tags": [
-      "Annabeth",
-      "pète"
-    ],
+    "tags": ["Annabeth", "pète"],
     "imageUrl": "/avatar/moufette.webp"
   },
   {
@@ -110,10 +80,7 @@
     "content": "Christelle ma chère et tendre je t'aime mais tu es une vraie pipelette ",
     "author": "ton chéri",
     "publishedDate": "lundi 20 janvier 2025",
-    "tags": [
-      "Christelle",
-      "pipelette"
-    ],
+    "tags": ["Christelle", "pipelette"],
     "imageUrl": "/avatar/chupa-chups.webp"
   },
   {
@@ -122,32 +89,7 @@
     "content": "Test in hardcode - it's ok",
     "author": "moi",
     "publishedDate": "jeudi 23 janvier 2025",
-    "tags": [
-      "test"
-    ],
+    "tags": ["test"],
     "imageUrl": "/uploads/1737647570614-17386351-big-queen.jpg"
-  },
-  {
-    "id": "1737710271838",
-    "title": "hello",
-    "content": "lorem ipsum dolores",
-    "author": "moi",
-    "publishedDate": "vendredi 24 janvier 2025",
-    "tags": [
-      "hello",
-      "test"
-    ],
-    "imageUrl": "/uploads/1737710271835-85264296-big-queen.jpg"
-  },
-  {
-    "id": "1737711170578",
-    "title": "Fries",
-    "content": "Crunchy fries from make it with bio pototoes",
-    "author": "me",
-    "publishedDate": "vendredi 24 janvier 2025",
-    "tags": [
-      "me"
-    ],
-    "imageUrl": "/uploads/1737711170571-949272116-fries.jpg"
   }
 ]

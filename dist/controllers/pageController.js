@@ -5,6 +5,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 import { aboutContent } from "../data/aboutContent.js";
 import { addArticleContent } from "../data/addArticleContent.js";
 import { contactContent } from "../data/contactContent.js";
+import { updateFormLayout } from "../data/updateFormLayout.js";
 export const getAboutPage = async (req, res, pageTitle = "About") => {
     try {
         const content = aboutContent("About me");
@@ -37,8 +38,8 @@ export const getAddArticlePage = async (req, res, pageTitle = "Ajouter un articl
 };
 export const getUpdateArticlePage = async (req, res, pageTitle = "Modifier un article") => {
     try {
-        const content = addArticleContent("Modifier un article");
-        renderPage(content, res, "Ajouter un article");
+        const content = "Modifier un article";
+        renderPage(updateFormLayout(content), res, "Modifier un article");
     }
     catch (error) {
         console.error("Error rendering AddArticle page:", error);

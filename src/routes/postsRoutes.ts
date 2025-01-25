@@ -16,7 +16,6 @@ const postsRoutes = () => {
   router.post("/test-upload", upload.single("file"), (req, res) => {
     try {
       if (req.file) {
-        console.log("Uploaded File:", req.file);
         res
           .status(200)
           .json({ message: "File uploaded successfully!", file: req.file });

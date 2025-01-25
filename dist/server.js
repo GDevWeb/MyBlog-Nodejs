@@ -15,10 +15,8 @@ server.use(express.json());
 // Parse form data
 server.use(express.urlencoded({ extended: true }));
 // route to upload file
-// server.use(
-//   "/uploads",
-//   express.static(path.join(__dirname, "../public/uploads"))
-// );
+server.use("/uploads", express.static(path.join(__dirname, "../public/uploads")));
+server.use(express.static(path.join(__dirname, "../src/")));
 // Serve static files
 // styles and medias
 server.use(express.static(path.join(__dirname, "../public/css")));

@@ -66,14 +66,12 @@ export const getLatestPosts = async (req, res) => {
 };
 export const createPost = async (req, res) => {
     try {
-        const { title, content, author, publishedDate, tags, imageUrl } = req.body;
-        console.log("File received from frontend:", req.file);
-        console.log("Body received from frontend:", req.body);
+        const { title, content, author, publishedDate, tags } = req.body;
         const tagsArray = tags
             ? tags.split(",").map((tag) => tag.trim())
             : [];
-        const filePath = req.body.avatar
-            ? `/uploads/${req.body.avatar}`
+        const filePath = req.file
+            ? `/uploads/${req.file.filename}`
             : "/avatar/default.png";
         const newPost = {
             title,
