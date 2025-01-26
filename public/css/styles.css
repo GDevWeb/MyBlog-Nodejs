@@ -205,6 +205,10 @@ footer {
 
 /* Media Queries */
 @media (max-width: 768px) {
+  header {
+    display: flex;
+    flex-direction: column;
+  }
   main {
     margin: 5vh 1rem;
     padding: 1rem;
@@ -248,9 +252,21 @@ form {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.formGroup > img#imagePreview {
+  display: flex;
+  align-items: center;
+  max-width: 200px;
+  margin: auto;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 1rem;
+  background-color: var(--secondary-color);
+}
+
 form label {
   display: block;
   font-size: 1.4rem;
+  font-weight: bolder;
   color: var(--font-color-dark);
   margin-bottom: 0.5rem;
 }
@@ -263,7 +279,7 @@ form textarea {
   margin-bottom: 1.5rem;
   font-size: 1.4rem;
   border: 1px solid var(--secondary-color);
-  border-radius: 5px;
+  border-radius: 0.5rem;
   background-color: var(--primary-color);
   color: var(--font-color-dark);
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);

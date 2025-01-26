@@ -1,96 +1,92 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    // **0.Check if the form is present into the DOM**
     try {
         const updateForm = document.getElementById("updatePostForm");
         if (!updateForm) {
             console.error("Update form not found!");
             return;
         }
-        /*          ***Fetching data***
-         *  Prefill the form using the postId                   *
-         *                                                      *
-         *                                                      *
-         */
-        try {
-            const postId = window.location.pathname
-                .split("/")
-                .pop();
-            if (postId) {
-                console.log("From the frontend postId;", postId);
+        const postId = window.location.pathname
+            .split("/")
+            .pop();
+        if (!postId) {
+            console.error("Error retrieving postId");
+            return;
+        }
+        console.log("From the frontend postId:", postId);
+        const prefillForm = async () => {
+            const response = await fetch(`http://localhost:3000/posts/post/${postId}?json=true`, {
+                method: "GET",
+                headers: {
+                    "Content-type": "application/json",
+                },
+            });
+            if (!response.ok) {
+                console.error("Error fetching post data");
+                throw new Error("Failed fetching post data");
             }
-            else {
-                console.log("Error retrieving postId");
-            }
-            /* Fetching on get posts/post/:id */
-            const prefillForm = async () => {
-                const response = await fetch(`http://localhost:3000/posts/post/${postId}?json=true`, {
-                    method: "GET",
-                    headers: {
-                        "Content-type": "application/json",
-                    },
-                });
-                if (!response.ok) {
-                    console.error("Error fetching post data");
-                    throw new Error("Failed fetching post data");
+            const postData = await response.json();
+            console.log("Post Data:", postData);
+            const titleInput = document.getElementById("title");
+            const imagePreview = document.getElementById("imagePreview");
+            const imageInput = document.getElementById("imageUrl");
+            const contentInput = document.getElementById("content");
+            const authorInput = document.getElementById("author");
+            const tagsInput = document.getElementById("tags");
+            if (titleInput)
+                titleInput.value = postData.title;
+            if (imagePreview)
+                imagePreview.src = postData.imageUrl || "";
+            if (contentInput)
+                contentInput.value = postData.content;
+            if (authorInput)
+                authorInput.value = postData.author;
+            if (tagsInput)
+                tagsInput.value = postData.tags.join(", ");
+            console.log("Form populated successfully");
+        };
+        await prefillForm();
+        updateForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            console.log("Form submission started...");
+            const formData = new FormData(updateForm);
+            const imageInput = document.getElementById("imageUrl");
+            const imageFile = imageInput?.files?.[0] || null;
+            const titleData = formData.get("title")?.toString() || "No title provided";
+            const contentData = formData.get("content")?.toString() || "No content provided";
+            const authorData = formData.get("author")?.toString() || "No author provided";
+            const tagsData = formData.get("tags")?.toString() || "No tags provided";
+            const newPostData = {
+                title: titleData,
+                content: contentData,
+                author: authorData,
+                tags: tagsData.split(", ").map((tag) => tag.trim()),
+                imageUrl: imageFile ? URL.createObjectURL(imageFile) : "",
+            };
+            console.log("New Post Data:", newPostData);
+            const updatePost = async () => {
+                try {
+                    const response = await fetch(`http://localhost:3000/posts/update-post/${postId}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-type": "application/x-www-form-urlencoded",
+                        },
+                        body: formData,
+                    });
+                    if (!response.ok) {
+                        const errorMessage = await response.text();
+                        console.error("Error from backend:", errorMessage);
+                        throw new Error(errorMessage);
+                    }
+                    console.log("Post updated successfully!");
+                    alert("Post updated successfully!");
+                    window.location.href = "/posts";
                 }
-                // Parse as JSON only if the response is valid
-                const postData = await response.json();
-                console.log("Post Data:", postData);
-                /* Populating the form */
-                const titleInput = document.getElementById("title");
-                console.log(titleInput);
-                const imagePreview = document.getElementById("imagePreview");
-                const contentInput = document.getElementById("content");
-                const authorInput = document.getElementById("author");
-                const tagsInput = document.getElementById("tags");
-                if (titleInput)
-                    titleInput.value = postData.title;
-                if (imagePreview)
-                    imagePreview.src = postData.imageUrl || "";
-                console.log(imagePreview.src);
-                if (contentInput)
-                    contentInput.value = postData.content;
-                if (authorInput)
-                    authorInput.value = postData.author;
-                if (tagsInput)
-                    tagsInput.value = postData.tags.join(", ");
-                console.log("Form populated successfully");
-                if (titleInput.value === "" ||
-                    imagePreview.src === "" ||
-                    contentInput.value === "" ||
-                    tagsInput.value === "") {
-                    console.log("An error has occurred populating form");
-                    return;
+                catch (error) {
+                    console.error("Error updating post:", error);
                 }
             };
-            prefillForm();
-        }
-        catch (error) {
-            console.error("An error has occurred:", error);
-        }
-        /* **************************************************** */
-        // updateForm.addEventListener("submit", async (event) => {
-        //   event.preventDefault();
-        //   console.log("Form submission started...");
-        //   const formData = new FormData(updateForm);
-        //   // Extract form data
-        //   const titleData =
-        //     formData.get("title")?.toString() || "No title provided";
-        //   const contentData =
-        //     formData.get("content")?.toString() || "No content provided";
-        //   const authorData =
-        //     formData.get("author")?.toString() || "No author provided";
-        //   const tagsData = formData.get("tags")?.toString() || "No tags provided";
-        //   // Grouped logging
-        //   console.log("Form Data:", {
-        //     title: titleData,
-        //     content: contentData,
-        //     author: authorData,
-        //     tags: tagsData,
-        //   });
-        // });
-        // Optional: Further process formData (e.g., sending to an API)
-        console.log("Update form ready for submission.");
+            await updatePost();
+        });
     }
     catch (error) {
         console.error("An error has occurred:", error);

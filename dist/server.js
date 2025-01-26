@@ -16,7 +16,7 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 // route to upload file
 server.use("/uploads", express.static(path.join(__dirname, "../public/uploads")));
-server.use(express.static(path.join(__dirname, "../src/")));
+// server.use(express.static(path.join(__dirname, "../src/")));
 // Server frontend js
 server.use(express.static(path.join(__dirname, "../dist/js")));
 // Serve static files

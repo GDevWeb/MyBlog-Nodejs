@@ -5,8 +5,8 @@ export interface PostType {
   title: string;
   content: string;
   author: string;
-  publishedDate: string;
-  tags: string[];
+  tags: string[] | string;
+  publishedDate?: string;
   imageUrl?: string;
   updatedAt?: string;
 }

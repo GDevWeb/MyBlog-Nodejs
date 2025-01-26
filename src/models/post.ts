@@ -115,7 +115,7 @@ class Post {
       const newId = Date.now();
       const currentDate = generateDateNow();
 
-      const newPost: PostType = {
+      const newPost: PostsDataType = {
         id: String(newId),
         title: newPostData.title,
         content: newPostData.content,
@@ -188,7 +188,9 @@ class Post {
     try {
       const posts = await this.fetchAll();
 
-      const updatedPosts: PostType[] = posts.filter((post) => post.id !== id);
+      const updatedPosts: PostsDataType[] = posts.filter(
+        (post) => post.id !== id
+      );
 
       /* Fallback */
       // not found

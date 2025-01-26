@@ -102,16 +102,16 @@
   },
   {
     "id": "1737401191597",
-    "title": "Updated  in Postman",
-    "content": "Updated in Postman",
+    "title": "Updated  in frontend + image",
+    "content": "Updated  in frontend + image + blob => img",
     "author": "John Doe",
     "publishedDate": "lundi 20 janvier 2025",
     "tags": [
-      "Node.js",
-      "JavaScript",
-      "Backend"
+      "Updated",
+      "frontend",
+      "image"
     ],
-    "imageUrl": "/avatar/logo.png",
-    "updatedAt": "2025-01-26T11:20:06.933Z"
+    "imageUrl": "blob:http://localhost:3000/f545458e-c0c3-4743-a0e4-c37e9cdfd31c",
+    "updatedAt": "2025-01-26T17:44:15.807Z"
   }
 ]

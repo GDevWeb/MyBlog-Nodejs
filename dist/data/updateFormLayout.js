@@ -8,13 +8,13 @@ export const updateFormLayout = () => {
   </div>
 
   <div class="formGroup">
-  <label for="imagePreview">Image URL:</label>
-  <img src="" alt="current-image" id="imagePreview" name="imagePreview" max-width:"200px"/>
+  <label for="imagePreview">Image preview:</label>
+  <img src="" alt="current-image" id="imagePreview" name="imagePreview"/>
   </div>
   
   <div class="formGroup">
   <label for="image">Image URL:</label>
-  <input type="file" id="imageUrl" name="imageUrl">
+  <input type="file" id="imageUrl" name="imageUrl" accept="image/*">
   </div>
   
   <div class="formGroup">
@@ -30,6 +30,10 @@ export const updateFormLayout = () => {
   <div class="formGroup">
   <label for="tags">Tags (comma-separated):</label>
   <input type="text" id="tags" name="tags" required>
+  </div>
+
+  <div class="formGroup">
+  <p id="statusForm"></p>
   </div>
   
   <button type="submit">Update Post</button>
