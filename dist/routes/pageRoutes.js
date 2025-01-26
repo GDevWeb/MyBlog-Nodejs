@@ -12,7 +12,7 @@ const generalsRoutes = () => {
     // Add-article
     router.get("/add-article", getAddArticlePage);
     // Update-article
-    router.get("/update-article", getUpdateArticlePage);
+    router.get("/update-article/:id", getUpdateArticlePage);
     return router;
 };
 export default generalsRoutes;

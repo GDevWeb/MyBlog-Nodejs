@@ -28,7 +28,7 @@ export const getContactPage = async (req, res) => {
 };
 export const getAddArticlePage = async (req, res) => {
     try {
-        const content = addArticleContent("Ajouter un article");
+        const content = addArticleContent();
         renderPage(content, res, "Ajouter un article");
     }
     catch (error) {

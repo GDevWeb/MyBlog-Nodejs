@@ -10,7 +10,7 @@
       "JavaScript",
       "Backend"
     ],
-    "imageUrl": "/assets/avatar/default.png"
+    "imageUrl": "/avatar/default.png"
   },
   {
     "id": 2,
@@ -22,7 +22,8 @@
       "TypeScript",
       "JavaScript",
       "Programming"
-    ]
+    ],
+    "imageUrl": "/avatar/default.webp"
   },
   {
     "id": 3,
@@ -34,7 +35,8 @@
       "Express.js",
       "Node.js",
       "Web Development"
-    ]
+    ],
+    "imageUrl": "/avatar/default.png"
   },
   {
     "id": 4,
@@ -46,7 +48,8 @@
       "REST",
       "APIs",
       "Web Development"
-    ]
+    ],
+    "imageUrl": "/avatar/default.png"
   },
   {
     "id": 5,
@@ -58,7 +61,8 @@
       "JavaScript",
       "Debugging",
       "Development Tools"
-    ]
+    ],
+    "imageUrl": "/avatar/default.png"
   },
   {
     "id": "1737397474073",
@@ -95,5 +99,19 @@
       "pipelette"
     ],
     "imageUrl": "/avatar/chupa-chups.webp"
+  },
+  {
+    "id": "1737401191597",
+    "title": "Updated  in Postman",
+    "content": "Updated in Postman",
+    "author": "John Doe",
+    "publishedDate": "lundi 20 janvier 2025",
+    "tags": [
+      "Node.js",
+      "JavaScript",
+      "Backend"
+    ],
+    "imageUrl": "/avatar/logo.png",
+    "updatedAt": "2025-01-26T11:20:06.933Z"
   }
 ]

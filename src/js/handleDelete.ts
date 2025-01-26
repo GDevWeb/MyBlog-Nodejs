@@ -3,8 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ".deleteBtn"
   ) as HTMLButtonElement | null;
 
-  const updateBtn = "";
-
+  /* Delete */
   deleteBtn?.addEventListener("click", async (event: Event) => {
     const target = event.currentTarget as HTMLButtonElement;
     const postId = target.dataset.id;

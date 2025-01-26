@@ -9,13 +9,9 @@ export const generatePost = (post) => `
       <p><strong>Published Date:</strong> ${post.publishedDate}</p>
       <hr>
     <div class="containerCta">
-      <a href="/posts">Retour aux articles</a>
-      <button class="updateBtn" data-id=${post.id}>Modifier</button>
+      <button class="backBtn"><a href="/posts">Retour aux articles</a></button>
+      <button class="updateBtn" data-id=${post.id}><a href="/update-article/${post.id}">Modifier</a></button>
       <button class="deleteBtn" data-id=${post.id}>Supprimer</button>
     </div>
-
-  <div class="containerCta">
-  </div>
-
     </article>
     `;

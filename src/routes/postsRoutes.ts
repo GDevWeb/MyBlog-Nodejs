@@ -38,7 +38,7 @@ const postsRoutes = () => {
   router.post("/create-post", upload.single("file"), createPost);
 
   // Update:
-  router.put("update-post/:id", upload.single("file"), updatePost);
+  router.put("/update-post/:id", upload.single("file"), updatePost);
 
   // Delete a specific article by id
   router.delete("/delete-post/:id", deletePost);

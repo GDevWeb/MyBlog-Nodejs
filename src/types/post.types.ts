@@ -8,6 +8,7 @@ export interface PostType {
   publishedDate: string;
   tags: string[];
   imageUrl?: string;
+  updatedAt?: string;
 }
 
 export default PostType;

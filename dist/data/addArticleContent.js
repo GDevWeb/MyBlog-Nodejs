@@ -1,7 +1,6 @@
-export const addArticleContent = (title) => {
+export const addArticleContent = () => {
     return `
       <form action="/posts/create-post" method="POST" enctype="multipart/form-data">
-      <h1>${title}</h1>
     <div class="formGroup">
       <label for="title">Title</label>
       <input

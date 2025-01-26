@@ -82,7 +82,7 @@ class Post {
     }
   }
 
-  // search one post bu his id :
+  // search one post by his id :
   static async findById(id: number) {
     try {
       const posts = await this.fetchAll();
@@ -140,6 +140,7 @@ class Post {
   }
 
   // 3.Update
+  // Update a post by ID
   static async updateById({
     id,
     title,
@@ -150,30 +151,32 @@ class Post {
     imageUrl,
   }: Partial<Post>): Promise<PostType | null> {
     try {
-      // 1.fetch data
+      // Fetch existing posts
       const posts = await this.fetchAll();
-      //  2.find postId
-      const postIndex = posts.findIndex((post) => {
-        post.id === id;
-      });
-      // 3.fallback
-      // if there is a match:
-      if (postIndex !== -1) {
+
+      // Find post index
+      const postIndex = posts.findIndex((post) => post.id === id);
+
+      // No post found
+      if (postIndex === -1) {
         return null;
       }
-      // if there is not match
+
+      // Update the post
       posts[postIndex] = {
         ...posts[postIndex],
         title: title || posts[postIndex].title,
         content: content || posts[postIndex].content,
         author: author || posts[postIndex].author,
         tags: tags || posts[postIndex].tags,
-        updatedAt: generateDateNow(),
-        imageUrl: posts[postIndex].imageUrl,
+        updatedAt: new Date().toISOString(),
+        imageUrl: imageUrl || posts[postIndex].imageUrl,
       };
 
+      // Save updated posts to file
       await this.writeFile(posts);
-      // await this.writeFile(postsFilePath)
+
+      // Return updated post
       return posts[postIndex];
     } catch (error) {
       console.error("Error updating post:", error);

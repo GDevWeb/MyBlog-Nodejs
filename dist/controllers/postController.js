@@ -30,18 +30,22 @@ export const getPostsById = async (req, res) => {
     try {
         const post = await Post.findById(Number(req.params.id));
         // render in HTML
-        if (post) {
-            const postToHTML = generatePost(post);
-            const html = generateHeaderHTML({
-                headerTitle: `Article ${post.title}`,
-                h1: `${post.title}`,
-                content: postToHTML,
-            });
-            renderPage(html, res, `Détail de l'article ${post.title}`, "/handleDeleteAndUpdate.js");
-        }
-        else {
+        if (!post) {
             res.status(404).sendFile(path.join(__dirname, "../views/", "404.html"));
+            return;
         }
+        // check if JSON is expected (prefill updateForm)
+        if (req.headers.accept?.includes("application/json") || req.query.json) {
+            res.status(200).json(post);
+            return;
+        }
+        const postToHTML = generatePost(post);
+        const html = generateHeaderHTML({
+            headerTitle: `Article ${post.title}`,
+            h1: `${post.title}`,
+            content: postToHTML,
+        });
+        renderPage(html, res, `Détail de l'article ${post.title}`, "/handleDeleteAndUpdate.js");
     }
     catch (error) {
         console.error("Error finding post:", error);
@@ -110,7 +114,9 @@ export const updatePost = async (req, res) => {
         });
         if (updatedPost) {
             // Success
-            res.status(202).json(updatedPost);
+            res
+                .status(202)
+                .json({ message: "Post updated successfully!", post: updatedPost });
         }
         else {
             // Not found
